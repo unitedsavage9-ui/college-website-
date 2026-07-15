@@ -5,12 +5,16 @@ interface HeaderProps {
   onMenuToggle: () => void;
   currentTab: string;
   setTab: (tab: string) => void;
+  isLoggedIn?: boolean;
+  onLogout?: () => void;
 }
 
 export default function Header({
   onMenuToggle,
   currentTab,
   setTab,
+  isLoggedIn = false,
+  onLogout,
 }: HeaderProps) {
   
   const navItems = [
@@ -20,6 +24,7 @@ export default function Header({
     { label: 'Notice Board', value: 'notices' },
     { label: 'Campus Gallery', value: 'gallery' },
     { label: 'Contact Us', value: 'contact' },
+    { label: 'Admin Panel', value: 'admin-portal' },
   ];
 
   return (
@@ -136,7 +141,7 @@ export default function Header({
         </div>
 
         {/* Student Portal direct access navbar launcher */}
-        <div>
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setTab('student-portal')}
             className={`font-bold text-xs px-4 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer hover:shadow-md ${
@@ -145,9 +150,18 @@ export default function Header({
                 : 'bg-white/10 text-white border border-white/20 hover:bg-prestige-gold hover:text-oxford-navy'
             }`}
           >
-            <span>Student Portal</span>
-            <span className="bg-red-600 w-2 h-2 rounded-full animate-pulse" />
+            <span>{isLoggedIn ? "My Dashboard 🎓" : "Student Portal"}</span>
+            <span className={`w-2 h-2 rounded-full ${isLoggedIn ? 'bg-green-500' : 'bg-red-600'} animate-pulse`} />
           </button>
+          {isLoggedIn && onLogout && (
+            <button
+              onClick={onLogout}
+              className="text-[10px] bg-white/10 hover:bg-red-600 hover:text-white border border-white/20 hover:border-red-600 px-2.5 py-1.5 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer"
+              title="Logout current session"
+            >
+              Logout
+            </button>
+          )}
         </div>
       </nav>
     </div>

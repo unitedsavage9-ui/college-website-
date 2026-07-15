@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, BookOpen, Calendar, HelpCircle, Phone, Award, LogOut, RotateCcw, MapPin, Home, Image, Mail } from 'lucide-react';
+import { X, BookOpen, Calendar, HelpCircle, Phone, Award, LogOut, RotateCcw, MapPin, Home, Image, Mail, Activity, LogIn, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Student } from '../types';
 
@@ -12,6 +12,8 @@ interface SidebarProps {
   setTab: (tab: string) => void;
   portalSubTab: string; // The student portal sub-tab
   setPortalSubTab: (subTab: string) => void;
+  isLoggedIn?: boolean;
+  onLogout?: () => void;
 }
 
 export default function Sidebar({
@@ -23,6 +25,8 @@ export default function Sidebar({
   setTab,
   portalSubTab,
   setPortalSubTab,
+  isLoggedIn = true,
+  onLogout,
 }: SidebarProps) {
 
   // Public items
@@ -33,6 +37,7 @@ export default function Sidebar({
     { label: 'Official Notice Board', value: 'notices', icon: HelpCircle },
     { label: 'Campus Gallery', value: 'gallery', icon: Image },
     { label: 'Contact Us', value: 'contact', icon: MapPin },
+    { label: 'AI Desk Admin Panel', value: 'admin-portal', icon: Activity },
   ];
 
   // Secure Portal sub-tabs
@@ -123,45 +128,83 @@ export default function Sidebar({
 
               {/* SECTION 2: SECURE PORTAL CONTROLS */}
               <div className="space-y-2 bg-prestige-gold/5 p-3 rounded-xl border border-prestige-gold/15">
-                <div className="flex items-center gap-2 px-1 pb-1">
-                  <div className="w-2 h-2 rounded-full bg-prestige-gold animate-pulse shrink-0" />
-                  <span className="text-[10px] font-extrabold text-oxford-navy uppercase tracking-wider">
-                    Student Zone (Rahul)
-                  </span>
-                </div>
+                {isLoggedIn ? (
+                  <>
+                    <div className="flex items-center justify-between px-1 pb-1">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-prestige-gold animate-pulse shrink-0" />
+                        <span className="text-[10px] font-extrabold text-oxford-navy uppercase tracking-wider">
+                          Student Zone (Active)
+                        </span>
+                      </div>
+                      {onLogout && (
+                        <button
+                          onClick={() => {
+                            onLogout();
+                            onClose();
+                          }}
+                          className="text-[9px] font-bold text-red-600 dark:text-red-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+                        >
+                          <LogOut className="w-2.5 h-2.5" />
+                          <span>Logout</span>
+                        </button>
+                      )}
+                    </div>
 
-                <div className="flex items-center gap-2.5 px-1 py-1.5 border-b border-outline-variant/10">
-                  <img
-                    src={student.photoUrl}
-                    alt={student.name}
-                    className="w-9 h-9 rounded-full border border-prestige-gold object-cover shadow-sm shrink-0"
-                  />
-                  <div className="min-w-0">
-                    <h4 className="font-serif font-bold text-oxford-navy text-xs truncate">{student.name}</h4>
-                    <p className="text-[9px] text-slate-gray font-mono truncate">{student.id} | {student.department}</p>
+                    <div className="flex items-center gap-2.5 px-1 py-1.5 border-b border-outline-variant/10">
+                      <img
+                        src={student.photoUrl}
+                        alt={student.name}
+                        className="w-9 h-9 rounded-full border border-prestige-gold object-cover shadow-sm shrink-0"
+                      />
+                      <div className="min-w-0">
+                        <h4 className="font-serif font-bold text-oxford-navy text-xs truncate">{student.name}</h4>
+                        <p className="text-[9px] text-slate-gray font-mono truncate">{student.id} | {student.department}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-0.5 pt-1">
+                      {portalItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = currentTab === 'student-portal' && portalSubTab === item.value;
+                        return (
+                          <button
+                            key={item.value}
+                            onClick={() => handleSelectPortalSub(item.value)}
+                            className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
+                              isActive
+                                ? 'bg-oxford-navy text-white font-bold border-l-4 border-prestige-gold pl-1.5'
+                                : 'text-on-surface-variant hover:bg-surface-container-high'
+                            }`}
+                          >
+                            <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-prestige-gold' : 'text-slate-gray'}`} />
+                            <span>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-4 px-2 space-y-3">
+                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
+                      <Lock className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[11px] font-bold text-oxford-navy">Session Signed Out</p>
+                      <p className="text-[9px] text-slate-gray">Access to academic reports requires student verification.</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setTab('student-portal');
+                        onClose();
+                      }}
+                      className="w-full py-1.5 px-3 bg-oxford-navy text-white hover:bg-oxford-navy/95 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                    >
+                      <LogIn className="w-3 h-3 text-prestige-gold" />
+                      <span>Log In to Portal</span>
+                    </button>
                   </div>
-                </div>
-
-                <div className="space-y-0.5 pt-1">
-                  {portalItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = currentTab === 'student-portal' && portalSubTab === item.value;
-                    return (
-                      <button
-                        key={item.value}
-                        onClick={() => handleSelectPortalSub(item.value)}
-                        className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                          isActive
-                            ? 'bg-oxford-navy text-white font-bold border-l-4 border-prestige-gold pl-1.5'
-                            : 'text-on-surface-variant hover:bg-surface-container-high'
-                        }`}
-                      >
-                        <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-prestige-gold' : 'text-slate-gray'}`} />
-                        <span>{item.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+                )}
               </div>
 
               {/* SECTION 3: QUICK CONTACT DETAILS */}

@@ -9,7 +9,37 @@ export const INITIAL_STUDENT: Student = {
   attendancePercent: 84,
   feesDue: 0,
   feesPaid: 24500,
+  email: "rahul@dhemajicollege.edu.in",
+  phone: "9876543210"
 };
+
+export const MOCK_STUDENTS: Student[] = [
+  INITIAL_STUDENT,
+  {
+    name: "Anaya Barua",
+    id: "DC-2024-5104",
+    department: "B.A. English",
+    photoUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop",
+    cgpa: 8.45,
+    attendancePercent: 81,
+    feesDue: 1500,
+    feesPaid: 12500,
+    email: "anaya@dhemajicollege.edu.in",
+    phone: "8765432109"
+  },
+  {
+    name: "Bornali Phukan",
+    id: "DC-2024-9122",
+    department: "B.Sc Botany",
+    photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+    cgpa: 9.12,
+    attendancePercent: 88,
+    feesDue: 0,
+    feesPaid: 14000,
+    email: "bornali@dhemajicollege.edu.in",
+    phone: "7654321098"
+  }
+];
 
 export const COURSE_SCHEDULE: CourseScheduleItem[] = [
   {

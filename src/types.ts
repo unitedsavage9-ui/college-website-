@@ -7,6 +7,8 @@ export interface Student {
   attendancePercent: number;
   feesDue: number;
   feesPaid: number;
+  email?: string;
+  phone?: string;
 }
 
 export interface CourseScheduleItem {
