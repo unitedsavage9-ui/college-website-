@@ -1,0 +1,6 @@
+{
+  "name": "Dhemaji College Student Portal",
+  "description": "Interactive academic portal for students of Dhemaji College with dashboards for attendance tracking, results, and fees payment.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
