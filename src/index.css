@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-oxford-navy: #002147;
+  --color-prestige-gold: #D4AF37;
+  --color-slate-gray: #4A4A4A;
+  --color-on-surface: #191c1d;
+  --color-on-surface-variant: #44474e;
+  --color-surface: #f8f9fa;
+  --color-surface-dim: #d9dadb;
+  --color-surface-bright: #f8f9fa;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f3f4f5;
+  --color-surface-container: #edeeef;
+  --color-surface-container-high: #e7e8e9;
+  --color-surface-container-highest: #e1e3e4;
+  --color-glass-surface: rgba(255, 255, 255, 0.75);
+  --color-glass-surface-dark: rgba(0, 33, 71, 0.7);
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  .prestige-border {
+    border-left: 4px solid #D4AF37;
+  }
+  
+  .animate-marquee {
+    display: inline-block;
+    animation: marquee 30s linear infinite;
+    padding-left: 100%;
+  }
+  
+  @keyframes marquee {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+  }
+}

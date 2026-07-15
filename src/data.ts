@@ -1,0 +1,227 @@
+import { Student, CourseScheduleItem, NotificationItem, SubjectAttendance, SemesterResult, FeeItem } from './types';
+
+export const INITIAL_STUDENT: Student = {
+  name: "Rahul",
+  id: "DC-2024-8842",
+  department: "B.Sc Physics",
+  photoUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBmp55i7bzf4LVz0YgHIQ17FTNWC4Q8gIDRU3D9M0QDm9nA6OJNbtdyldERfdJbPgRCsk90n9ibErea56weDn3nDM-Y1BMMg1AAz8YqafmCWLkcjYwkfb9qK53XKXdybOtObgSeFrRNpXPAyNtgQIu6H7wy71K5SMmO7rJJRlsKlEDsSA649C0Ym7zmWuvDiVwvr4vQsgo9I9GVShTM_71ecjQk0eXZ9kcEcQV054VMV75VNG3DqADi",
+  cgpa: 8.92,
+  attendancePercent: 84,
+  feesDue: 0,
+  feesPaid: 24500,
+};
+
+export const COURSE_SCHEDULE: CourseScheduleItem[] = [
+  {
+    id: "class-1",
+    time: "09:30 AM - 10:30 AM",
+    title: "Quantum Mechanics",
+    location: "Room 302, Block B",
+    completed: false,
+    prestigeBorder: true,
+    date: "Sept 24, Tuesday",
+  },
+  {
+    id: "class-2",
+    time: "11:00 AM - 12:00 PM",
+    title: "Electromagnetism",
+    location: "Physics Lab 1",
+    completed: true,
+    prestigeBorder: false,
+    date: "Sept 24, Tuesday",
+  },
+  {
+    id: "class-3",
+    time: "01:30 PM - 02:30 PM",
+    title: "Mathematical Physics",
+    location: "Room 304, Block B",
+    completed: false,
+    prestigeBorder: false,
+    date: "Sept 24, Tuesday",
+  },
+  {
+    id: "class-4",
+    time: "03:00 PM - 04:00 PM",
+    title: "Statistical Mechanics",
+    location: "Auditorium 2",
+    completed: false,
+    prestigeBorder: false,
+    date: "Sept 24, Tuesday",
+  },
+];
+
+export const NOTIFICATIONS: NotificationItem[] = [
+  {
+    id: "notif-1",
+    title: "Lab Report Pending",
+    description: "Submit your thermodynamics lab report by tomorrow 5:00 PM.",
+    timeAgo: "2 hours ago",
+    type: "pending",
+  },
+  {
+    id: "notif-2",
+    title: "Library Books Due",
+    description: "2 books are due for return in the next 48 hours.",
+    timeAgo: "Yesterday",
+    type: "due",
+  },
+  {
+    id: "notif-3",
+    title: "End Semester Exams Schedule",
+    description: "The official datesheet for B.Sc Physics Semester 4 has been published.",
+    timeAgo: "3 days ago",
+    type: "announcement",
+  },
+  {
+    id: "notif-4",
+    title: "Fee Waiver Approval",
+    description: "Your scholarship application has been verified by the dean office.",
+    timeAgo: "1 week ago",
+    type: "announcement",
+  },
+];
+
+export const SUBJECT_ATTENDANCE: SubjectAttendance[] = [
+  {
+    id: "att-1",
+    subjectCode: "PHY-401",
+    subjectName: "Quantum Mechanics",
+    attendedClasses: 38,
+    totalClasses: 45,
+    attendancePercent: 84.4,
+    lastAttended: "Today, 09:30 AM",
+  },
+  {
+    id: "att-2",
+    subjectCode: "PHY-402",
+    subjectName: "Electromagnetism",
+    attendedClasses: 42,
+    totalClasses: 50,
+    attendancePercent: 84.0,
+    lastAttended: "Today, 11:00 AM",
+  },
+  {
+    id: "att-3",
+    subjectCode: "PHY-403",
+    subjectName: "Statistical Mechanics",
+    attendedClasses: 31,
+    totalClasses: 40,
+    attendancePercent: 77.5,
+    lastAttended: "Yesterday, 01:30 PM",
+  },
+  {
+    id: "att-4",
+    subjectCode: "PHY-404-P",
+    subjectName: "Physics Lab 1",
+    attendedClasses: 18,
+    totalClasses: 20,
+    attendancePercent: 90.0,
+    lastAttended: "Oct 12, 10:00 AM",
+  },
+  {
+    id: "att-5",
+    subjectCode: "PHY-405",
+    subjectName: "Mathematical Physics",
+    attendedClasses: 28,
+    totalClasses: 36,
+    attendancePercent: 77.8,
+    lastAttended: "Oct 11, 02:30 PM",
+  },
+  {
+    id: "att-6",
+    subjectCode: "HUM-401",
+    subjectName: "Environmental Science",
+    attendedClasses: 23,
+    totalClasses: 25,
+    attendancePercent: 92.0,
+    lastAttended: "Oct 10, 04:00 PM",
+  },
+];
+
+export const SEMESTER_RESULTS: SemesterResult[] = [
+  {
+    id: "sem-3",
+    semesterName: "Semester III (Fall 2025)",
+    sgpa: 9.06,
+    subjects: [
+      { code: "PHY-301", name: "Classical Mechanics", grade: "O", credits: 4, internalMarks: 27, externalMarks: 65, maxMarks: 100 },
+      { code: "PHY-302", name: "Solid State Physics", grade: "A+", credits: 4, internalMarks: 26, externalMarks: 60, maxMarks: 100 },
+      { code: "PHY-303", name: "Analog Electronics", grade: "A", credits: 3, internalMarks: 24, externalMarks: 58, maxMarks: 100 },
+      { code: "PHY-304-P", name: "Electronics Lab", grade: "O", credits: 2, internalMarks: 29, externalMarks: 68, maxMarks: 100 },
+      { code: "MTH-305", name: "Advanced Calculus", grade: "A+", credits: 4, internalMarks: 25, externalMarks: 61, maxMarks: 100 },
+    ],
+  },
+  {
+    id: "sem-2",
+    semesterName: "Semester II (Spring 2025)",
+    sgpa: 8.95,
+    subjects: [
+      { code: "PHY-201", name: "Wave Optics & Acoustics", grade: "A+", credits: 4, internalMarks: 24, externalMarks: 62, maxMarks: 100 },
+      { code: "PHY-202", name: "Thermodynamics", grade: "A", credits: 4, internalMarks: 23, externalMarks: 58, maxMarks: 100 },
+      { code: "PHY-203-P", name: "Optics Lab", grade: "O", credits: 2, internalMarks: 28, externalMarks: 66, maxMarks: 100 },
+      { code: "MTH-204", name: "Differential Equations", grade: "A+", credits: 4, internalMarks: 26, externalMarks: 60, maxMarks: 100 },
+      { code: "CS-205", name: "Computational Physics", grade: "O", credits: 3, internalMarks: 27, externalMarks: 67, maxMarks: 100 },
+    ],
+  },
+  {
+    id: "sem-1",
+    semesterName: "Semester I (Fall 2024)",
+    sgpa: 8.75,
+    subjects: [
+      { code: "PHY-101", name: "Properties of Matter", grade: "A", credits: 4, internalMarks: 22, externalMarks: 56, maxMarks: 100 },
+      { code: "PHY-102", name: "Kinematics & Dynamics", grade: "A+", credits: 4, internalMarks: 25, externalMarks: 59, maxMarks: 100 },
+      { code: "PHY-103-P", name: "Mechanics Lab", grade: "A+", credits: 2, internalMarks: 25, externalMarks: 62, maxMarks: 100 },
+      { code: "CHM-104", name: "Inorganic Chemistry", grade: "B+", credits: 3, internalMarks: 20, externalMarks: 48, maxMarks: 100 },
+      { code: "ENG-105", name: "Technical Communication", grade: "O", credits: 2, internalMarks: 28, externalMarks: 65, maxMarks: 100 },
+    ],
+  },
+];
+
+export const INITIAL_FEES: FeeItem[] = [
+  {
+    id: "fee-4",
+    title: "Semester 4 Tuition Fee",
+    amount: 12500,
+    dueDate: "2026-08-15",
+    status: "pending",
+    category: "Tuition",
+  },
+  {
+    id: "fee-5",
+    title: "Examination Fee (Sem IV)",
+    amount: 1500,
+    dueDate: "2026-08-30",
+    status: "pending",
+    category: "Examination",
+  },
+  {
+    id: "fee-1",
+    title: "Semester 3 Tuition Fee",
+    amount: 12500,
+    dueDate: "2025-08-15",
+    status: "paid",
+    category: "Tuition",
+    transactionId: "TXN-982314552",
+    paymentDate: "2025-08-10",
+  },
+  {
+    id: "fee-2",
+    title: "Semester 3 Exam Fee",
+    amount: 1500,
+    dueDate: "2025-08-30",
+    status: "paid",
+    category: "Examination",
+    transactionId: "TXN-984411204",
+    paymentDate: "2025-08-25",
+  },
+  {
+    id: "fee-3",
+    title: "Annual Library Fee",
+    amount: 1000,
+    dueDate: "2025-07-20",
+    status: "paid",
+    category: "Library",
+    transactionId: "TXN-975510238",
+    paymentDate: "2025-07-18",
+  },
+];
