@@ -154,24 +154,100 @@ How can I assist you with your academic matters today? You can ask me about:
       ? { id: studentProfile.id, name: studentProfile.name, role: "student" as const }
       : { id: "guest", name: "Guest Visitor", role: "guest" as const };
 
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          messages: updatedMessages.map(m => ({ role: m.role, text: m.text })),
-          stream: true,
-          user: apiUser,
-          sessionId: sessionId
-        })
-      });
+    const maxRetries = 3;
+    let attempt = 0;
+    let success = false;
+    let response: Response | null = null;
 
-      if (!response.ok) {
-        throw new Error(`Server returned error status ${response.status}`);
+    while (attempt < maxRetries && !success) {
+      try {
+        if (attempt > 0) {
+          const backoffTime = Math.pow(2, attempt) * 500; // 1000ms, 2000ms
+          setChatError(`Connection flagged or interrupted. Retrying attempt ${attempt}/${maxRetries} in ${backoffTime}ms...`);
+          await new Promise(resolve => setTimeout(resolve, backoffTime));
+        }
+
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            messages: updatedMessages.map(m => ({ role: m.role, text: m.text })),
+            stream: true,
+            user: apiUser,
+            sessionId: sessionId
+          })
+        });
+
+        if (response.ok) {
+          success = true;
+          setChatError(null);
+        } else {
+          console.warn(`API connection attempt ${attempt + 1} failed with status: ${response.status}`);
+          attempt++;
+        }
+      } catch (fetchErr) {
+        console.error(`API connection attempt ${attempt + 1} encountered network error:`, fetchErr);
+        attempt++;
+      }
+    }
+
+    if (!success || !response) {
+      setIsTyping(false);
+      setChatError("Grounded API connection interrupted. Swapping to local offline retrieval...");
+      
+      let fallbackSuccess = false;
+      let fallbackData: any = null;
+      let fallbackAttempt = 0;
+
+      while (fallbackAttempt < 2 && !fallbackSuccess) {
+        try {
+          const fallbackRes = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              messages: updatedMessages.map(m => ({ role: m.role, text: m.text })),
+              stream: false,
+              user: apiUser,
+              sessionId: sessionId
+            })
+          });
+          if (fallbackRes.ok) {
+            fallbackData = await fallbackRes.json();
+            fallbackSuccess = true;
+          } else {
+            fallbackAttempt++;
+          }
+        } catch (e) {
+          fallbackAttempt++;
+        }
       }
 
+      if (fallbackSuccess && fallbackData) {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: "model",
+            text: fallbackData.text || "I was unable to retrieve a response from Dhemaji College records right now.",
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        ]);
+        setChatError(null);
+      } else {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: "model",
+            text: "⚠️ **System Offline**: I am unable to connect to the college servers right now. Please ensure your network is running and try again, or visit the Administrative Secretariat Office.",
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        ]);
+      }
+      return;
+    }
+
+    try {
       // Read chunk-by-chunk for streaming
       const reader = response.body?.getReader();
       if (!reader) {
@@ -241,11 +317,10 @@ How can I assist you with your academic matters today? You can ask me about:
       }
 
     } catch (err: any) {
-      console.error("Chat error:", err);
+      console.error("Chat streaming parsing error:", err);
       setIsTyping(false);
-      setChatError("API connection interrupted. Attempting sessional auto-recovery...");
+      setChatError("Streaming disrupted. Swapping to standard response retrieval...");
       
-      // Call local fallback endpoint as a final assurance
       try {
         const fallbackRes = await fetch('/api/chat', {
           method: 'POST',
@@ -259,25 +334,19 @@ How can I assist you with your academic matters today? You can ask me about:
         });
         const fallbackData = await fallbackRes.json();
         
-        setMessages(prev => [
-          ...prev,
-          {
-            role: "model",
-            text: fallbackData.text || "I was unable to retrieve a response from Dhemaji College records right now.",
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        setMessages(prev => {
+          const copy = [...prev];
+          if (copy.length > 0 && copy[copy.length - 1].role === "model") {
+            copy[copy.length - 1] = {
+              ...copy[copy.length - 1],
+              text: fallbackData.text || "Connection restored successfully."
+            };
           }
-        ]);
+          return copy;
+        });
         setChatError(null);
       } catch (fallbackErr) {
-        // Display full failure gracefully
-        setMessages(prev => [
-          ...prev,
-          {
-            role: "model",
-            text: "⚠️ **System Offline**: I am unable to connect to the college servers right now. Please ensure your network is running and try again, or visit the Administrative Secretariat Office.",
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          }
-        ]);
+        setChatError("API connection interrupted completely.");
       }
     }
   };

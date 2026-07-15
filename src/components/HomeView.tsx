@@ -18,6 +18,8 @@ import {
   CheckCircle,
   Library
 } from 'lucide-react';
+// @ts-ignore
+import principalPhoto from '../assets/images/principal_photo_1784132716210.jpg';
 
 interface HomeViewProps {
   onTabChange: (tab: string) => void;
@@ -209,7 +211,7 @@ export default function HomeView({ onTabChange }: HomeViewProps) {
             <div className="w-32 h-40 md:w-44 md:h-52 rounded-xl overflow-hidden border-2 border-prestige-gold shadow-md shrink-0 bg-slate-100">
               {/* Photo of the Principal */}
               <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80"
+                src={principalPhoto}
                 alt="Dr. Dipak Kr. Neog"
                 className="w-full h-full object-cover object-top"
                 referrerPolicy="no-referrer"
